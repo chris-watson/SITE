@@ -458,7 +458,7 @@
 		</div>
 	</div>
     
-    
+    <%--
     <div class="panel panel-default">
     	<div class="panel-heading"><h3 class="panel-title">Download C-CDAs for Incorporation</h3></div>
   			<div class="panel-body">
@@ -580,7 +580,7 @@
 			    
 			</div>
 	</div>
-    
+    --%>
  <!--<div class="panel panel-default">
     	<div class="panel-heading"><h3 class="panel-title">Downloads</h3></div>
     		<div class="panel-body">
