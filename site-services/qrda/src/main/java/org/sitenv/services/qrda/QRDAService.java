@@ -72,14 +72,14 @@ public class QRDAService {
 	
 	
 	//default values.
-	protected String SCHMATRON_WORKINGDIR = "C:\\Projects\\ONC\\SITE\\QRDA\\Schematron";
-    protected String SCHMATRON_CCDATMP = "C:\\Projects\\ONC\\SITE\\QRDA\\Schematron\\temp";
-    protected String SCHMATRON_RESULTDIR = "C:\\Projects\\ONC\\SITE\\QRDA\\Schematron\\ValidationResult";
-    protected String SCHMATRON_BUILDTEMPLATEFILE_CATEGORYI = "C:\\Projects\\ONC\\SITE\\QRDA\\Schematron\\build_template_categoryI.xml";
-    protected String SCHMATRON_BUILDTEMPLATEFILE_CATEGORYIII = "C:\\Projects\\ONC\\SITE\\QRDA\\Schematron\\build_template_categoryIII.xml";
-    protected String QRDA_XSD_PATH = "C:\\Projects\\ONC\\SITE\\QRDA\\Schematron\\XSD\\CDA_SDTC.xsd";
-    protected String LINUX_JAVA_HOME = "/usr/lib/jvm/java-7-oracle";
-	protected String[] ANTCMDS = null;
+	private String SCHMATRON_WORKINGDIR = null;
+	private String SCHMATRON_CCDATMP = null;
+	private String SCHMATRON_RESULTDIR = null;
+	private String SCHMATRON_BUILDTEMPLATEFILE_CATEGORYI = null;
+	private String SCHMATRON_BUILDTEMPLATEFILE_CATEGORYIII = null;
+	private String QRDA_XSD_PATH = null;
+	private String LINUX_JAVA_HOME = null;
+	private String[] ANTCMDS = null;
     
 	//mapping for directory.
 	private static final Map<String, String> RESULT_CATEGORYDIR_MAPPING;
@@ -400,6 +400,9 @@ public class QRDAService {
     	File dir = new File(SCHMATRON_CCDATMP);
     	File buildfiledir = new File(SCHMATRON_WORKINGDIR);
     	String fileName = null;
+    	File resultFile = null;
+    	File saveAsFile = null;
+    	File buildFile = null;
     	
     	
     	//capture the CCDA file sent through the web service save to the local file. 
@@ -414,7 +417,7 @@ public class QRDAService {
     		}
     		
     		fileName = category + "_" + UUID.randomUUID().toString().replaceAll("-", "");
-        	File saveAsFile = new File(dir, fileName + ".xml");
+        	saveAsFile = new File(dir, fileName + ".xml");
         	
         	
     		if(!saveAsFile.exists()) {
@@ -455,7 +458,8 @@ public class QRDAService {
 	    		}
 	    		
 	    		buildfileTemplate = buildfileTemplate.replace("{filetovalidate}",saveAsFile.getPath());
-	    		FileUtils.writeStringToFile(new File(buildfiledir, fileName + ".xml"), buildfileTemplate);
+	    		buildFile = new File(buildfiledir, fileName + ".xml");
+	    		FileUtils.writeStringToFile(buildFile, buildfileTemplate);
 	    		
 	    		//run the commands on a different processor.
 	        	List<String> cmds = new ArrayList<String>(Arrays.asList(ANTCMDS));
@@ -470,7 +474,7 @@ public class QRDAService {
 	        	
 	        	//figure out the result path.
 	        	File baseResultDir = new File(SCHMATRON_RESULTDIR, RESULT_CATEGORYDIR_MAPPING.get(category));
-	        	File resultFile = new File(baseResultDir,fileName + ".svrl");
+	        	resultFile = new File(baseResultDir,fileName + ".svrl");
 	        	System.out.println(resultFile.toString());
 	        	r = schematronCateogryIValidation(cmds, SCHMATRON_WORKINGDIR, resultFile);
 	        	r.setNote(StringUtils.join(cmds,"||"));
@@ -504,6 +508,16 @@ public class QRDAService {
     			} catch (IOException e) {
     				e.printStackTrace();
     			}
+    		}
+    		
+    		if (saveAsFile !=null) {
+    			saveAsFile.delete();
+    		}
+    		if (buildFile != null) {
+    			buildFile.delete();
+    		}
+    		if (resultFile != null) {
+    			resultFile.delete();
     		}
     	}
     	

@@ -62,6 +62,7 @@ public class DownloadIncorporationController extends BaseController {
     	referenceCCDAFileNames = new HashMap<String, String>();
     	referenceCCDAFileNames.put("1", "Ambulatory_Summary-no_errors.zip");
     	referenceCCDAFileNames.put("2", "Inpatient_Summary-no_errors.zip");
+    	referenceCCDAFileNames.put("2", "Inpatient_Summary-no_errors.zip"); 	
     }
 	
 	public void copyStream(InputStream in, OutputStream out){
