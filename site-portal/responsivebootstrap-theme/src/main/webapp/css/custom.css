@@ -471,16 +471,23 @@ h2 {
 		display: block;
 	}
 
+	
+
 	/* top row */
 	.col .thumbnail {
-		margin-bottom: -99999px;
-		padding-bottom: 99999px;
+		/* margin-bottom: -99999px; */
+		/* padding-bottom: 99999px; */
+		height: 250px;
+	}
+	
+	.col .glyphnail {
+		height: 350px;
 	}
 
 	/* top row */
 	.col .caption {
-		margin-bottom: -99999px;
-		padding-bottom: 99999px;
+		/* margin-bottom: -99999px; */
+		/* padding-bottom: 99999px; */
 	}
 
 	/* bottom row */
@@ -509,6 +516,10 @@ h2 {
 	overflow: hidden;
 }
 
+.thumbnail {
+	text-align: center;
+}
+
 .thumbnail span {
 	display: block;
 	font-weight: 500;
@@ -518,16 +529,30 @@ h2 {
 	color: inherit;
 }
 
+.thumbnail .siteglyphs {
+	text-align:center;
+}
+
+.thumbnail .glyphicon {
+	text-align:center;
+}
+
 .thumbnail .caption-head {
-	font-size: 30px;
+	margin-top: 25px;
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin-bottom: 25px;
+	text-align:center;
 }
 
 .thumbnail .caption-body {
 	font-size: 14px;
+	text-align:center;
 }
 
 .thumbnail .glyphicon {
-	font-size: 52px;
+	font-size: 100px;
 	position: relative;
 	top: 1px;
 	display: inline-block;
