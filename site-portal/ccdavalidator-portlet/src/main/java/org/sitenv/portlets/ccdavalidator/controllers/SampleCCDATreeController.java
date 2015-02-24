@@ -52,7 +52,7 @@ public class SampleCCDATreeController extends TreeController {
 		Map map = new HashMap();
 		
 		Gson gson = new Gson();
-		String json = gson.toJson(this.getRoots());
+		String json = gson.toJson(this.getTree().getRoots());
 		map.put("jsonRoot", json);
 		
 		return new ModelAndView("sampleCCDATreeJsonView", map);

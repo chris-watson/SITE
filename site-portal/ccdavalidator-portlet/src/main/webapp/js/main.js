@@ -368,10 +368,281 @@ function incorpRequired(field, rules, i, options){
 
 
 function loadSampleTrees(){
-	loadCCDASamplesFromVendorsTree();
+	//loadReferenceCCDAIncorpTree();
+	loadNegativeTestCCDATree();
 }
 
+function loadNegativeTestCCDATree(){
+	
+	$("#negTestccdafiletreepanel").jstree({
+		"json_data" : {
+			"ajax" : {
+				"url" : negativeTestCCDATreeURL,
+				"type" : "post",
+			}
+		},
+		
+		"types" : {
+			
+			"valid_children" : ["all"],
+			"type_attr" : "ref",
+			"types" : {
+				"root" : {
+					"icon" : {
+						"image" : window.currentContextPath + "/images/root.png"
+					},
+					"valid_children" : [ "file","folder" ],
+					"max_depth" : 2,
+					"hover_node" : false,
+					"select_node" : function(e) {
+						this.toggle_node(e);
+						return false;
+					}
+				},
+				"file" : {
+					"icon" : {
+						"image" : window.currentContextPath + "/images/file.png"
+					},
+					"valid_children" : [ "none" ],
+		    		"deselect_node" : function (node,e) {
+		    			  
+		    			 $('#negTestForm .formError').hide(0);
+		    			 
+		    			// var textValue = $('#incorpemail').val();
+			  				$('#negTestForm').trigger('reset');
+			  				$('#negTestCCDAsubmit').unbind("click");
+			  				
+			  				$('#negTestfilePathOutput').empty();
+			  				$('#negTestfilepath').val('');
+			  				
+			  				//$('#incorpemail').val(textValue);
+			  				
+		    		  },
+		    		  
+		    		  "select_node" : function (node,e) {
+		    			  
+		    			  $('#negTestForm .formError').hide(0);
+		    			  //populate the textbox
+		    			  $("#negTestfilepath").val(node.data("serverpath"));
+		    			  
+		    			  $("#negTestfilePathOutput").text($("#negTestfilepath").val());
+		    			 
+		    			  
+		    	    	  //hide the drop down panel
+		    			  $('[data-toggle="dropdown"]').parent().removeClass('open');
+		    			  
+		    			  
+		    			  $('#dLabel2').focus();
+		    			  $('#dLabel2').dropdown("toggle");
+		    			  
+		    			  $("#negTestCCDAsubmit").click(function(e) {
+		    				  
+		    				  var ajaximgpath = window.currentContextPath + "/css/ajax-loader.gif";
+		    				  	$.blockUI({ css: { 
+		    				        border: 'none', 
+		    				        padding: '15px', 
+		    				        backgroundColor: '#000', 
+		    				        '-webkit-border-radius': '10px', 
+		    				        '-moz-border-radius': '10px', 
+		    				        opacity: .5, 
+		    				        color: '#fff' 
+		    			    	},
+		    			    	message: '<div class="progressorpanel"><img src="'+ ajaximgpath + '" alt="loading">'+
+		    					          '<div class="lbl">Preparing your download...</div></div>' });
+		    				  	
+		    				  	var jform = $('#negTestForm');
+		    					jform.validationEngine({promptPosition:"centerRight", validateNonVisibleFields: true, updatePromptsPosition:true});
+		    					if(jform.validationEngine('validate'))
+		    						{
+		    						$('#negTestForm .formError').hide(0);
+		    						
+		    					    
+		    						$.fileDownload($('#negTestForm').attr('action'), {
+		    							
+		    							successCallback: function (url) {
+		    								$.unblockUI(); 
+		    				            },
+		    				            failCallback: function (responseHtml, url) {
+		    				            	alert("Server error:" + responseHtml);
+		    				            	alert(url);
+		    				            	$.unblockUI(); 
+		    				            },
+		    					        httpMethod: "POST",
+		    					        data: $('#negTestForm').serialize()
+		    					    });
+		    						}
+		    					else
+		    					{
+		    						$('#negTestForm .formError').show(0);
+		    						
+		    						$('#negTestForm .incorpfilepathformError').prependTo('#negTesterrorlock');
+		    					}
+		    					return false;
+		    			  });
+		    			  }
+		    			  
+		    		  },
+		    		  "folder" : {
+			    		  "icon" : {
+			    	    	  "image" : window.currentContextPath + "/images/folder.png"
+			    	      },
+			    		  "valid_children" : [ "file" ],
+			    		  "select_node" : function (e) {
+			    	    	  e.find('a:first').focus();
+			    			  this.toggle_node(e);
+			    	    	  return false;
+			    	      }
+			    	  }
+				}
+			},
+			"plugins" : [ "themes", "json_data", "ui", "types" ]
+			}).bind('loaded.jstree', function(e, data) {
+				isfiletreeloaded = true;
+				
+				loadReferenceCCDAIncorpTree();
+				
+				$('#negTestccdafiletreepanel').find('a').each(function() {
+				    $(this).attr('tabindex', '1');
+				});
+			});
+	
+}
 
+function loadReferenceCCDAIncorpTree(){
+	
+	$("#refccdafiletreepanel").jstree({
+		"json_data" : {
+			"ajax" : {
+				"url" : referenceCCDAIncorpTreeURL,
+				"type" : "post",
+			}
+		},
+		
+		"types" : {
+			
+			"valid_children" : ["all"],
+			"type_attr" : "ref",
+			"types" : {
+				"root" : {
+					"icon" : {
+						"image" : window.currentContextPath + "/images/root.png"
+					},
+					"valid_children" : [ "file","folder" ],
+					"max_depth" : 2,
+					"hover_node" : false,
+					"select_node" : function(e) {
+						this.toggle_node(e);
+						return false;
+					}
+				},
+				"file" : {
+					"icon" : {
+						"image" : window.currentContextPath + "/images/file.png"
+					},
+					"valid_children" : [ "none" ],
+		    		"deselect_node" : function (node,e) {
+		    			  
+		    			 $('#refIncorpForm .formError').hide(0);
+		    			 
+		    			// var textValue = $('#incorpemail').val();
+			  				$('#refIncorpForm').trigger('reset');
+			  				$('#refIncorpCCDAsubmit').unbind("click");
+			  				
+			  				$('#refIncorpfilePathOutput').empty();
+			  				$('#refIncorpfilepath').val('');
+			  				
+			  				//$('#incorpemail').val(textValue);
+			  				
+		    		  },
+		    		  
+		    		  "select_node" : function (node,e) {
+		    			  
+		    			  $('#refIncorpForm .formError').hide(0);
+		    			  //populate the textbox
+		    			  $("#refIncorpfilepath").val(node.data("serverpath"));
+		    			  
+		    			  $("#refIncorpfilePathOutput").text($("#refIncorpfilepath").val());
+		    			 
+		    			  
+		    	    	  //hide the drop down panel
+		    			  $('[data-toggle="dropdown"]').parent().removeClass('open');
+		    			  
+		    			  
+		    			  $('#dLabel1').focus();
+		    			  $('#dLabel1').dropdown("toggle");
+		    			  
+		    			  $("#refIncorpCCDAsubmit").click(function(e) {
+		    				  
+		    				  var ajaximgpath = window.currentContextPath + "/css/ajax-loader.gif";
+		    				  	$.blockUI({ css: { 
+		    				        border: 'none', 
+		    				        padding: '15px', 
+		    				        backgroundColor: '#000', 
+		    				        '-webkit-border-radius': '10px', 
+		    				        '-moz-border-radius': '10px', 
+		    				        opacity: .5, 
+		    				        color: '#fff' 
+		    			    	},
+		    			    	message: '<div class="progressorpanel"><img src="'+ ajaximgpath + '" alt="loading">'+
+		    					          '<div class="lbl">Preparing your download...</div></div>' });
+		    				  	
+		    				  	var jform = $('#refIncorpForm');
+		    					jform.validationEngine({promptPosition:"centerRight", validateNonVisibleFields: true, updatePromptsPosition:true});
+		    					if(jform.validationEngine('validate'))
+		    						{
+		    						$('#refIncorpForm .formError').hide(0);
+		    						
+		    					    
+		    						$.fileDownload($('#refIncorpForm').attr('action'), {
+		    							
+		    							successCallback: function (url) {
+		    								$.unblockUI(); 
+		    				            },
+		    				            failCallback: function (responseHtml, url) {
+		    				            	alert("Server error:" + responseHtml);
+		    				            	alert(url);
+		    				            	$.unblockUI(); 
+		    				            },
+		    					        httpMethod: "POST",
+		    					        data: $('#refIncorpForm').serialize()
+		    					    });
+		    						}
+		    					else
+		    					{
+		    						$('#incorpForm .formError').show(0);
+		    						
+		    						$('#incorpform .incorpfilepathformError').prependTo('#incorperrorlock');
+		    					}
+		    					return false;
+		    			  });
+		    			  }
+		    			  
+		    		  },
+		    		  "folder" : {
+			    		  "icon" : {
+			    	    	  "image" : window.currentContextPath + "/images/folder.png"
+			    	      },
+			    		  "valid_children" : [ "file" ],
+			    		  "select_node" : function (e) {
+			    	    	  e.find('a:first').focus();
+			    			  this.toggle_node(e);
+			    	    	  return false;
+			    	      }
+			    	  }
+				}
+			},
+			"plugins" : [ "themes", "json_data", "ui", "types" ]
+			}).bind('loaded.jstree', function(e, data) {
+				isfiletreeloaded = true;
+				//alert("Loaded Incorp Tree");
+				loadCCDASamplesFromVendorsTree();
+				
+				$('#refccdafiletreepanel').find('a').each(function() {
+				    $(this).attr('tabindex', '1');
+				});
+			});
+	
+}
 
 function loadCCDASamplesFromVendorsTree(){
 	
@@ -773,6 +1044,8 @@ function loadCCDAReferenceTree(){
 	    "plugins" : [ "themes", "json_data", "ui", "types" ]
 	}).bind('loaded.jstree', function(e, data) {
 		isfiletreeloaded = true;
+		
+		//loadReferenceCCDAIncorpTree();
 		
 		$('#referenceDownloadFileTreePanel').find('a').each(function() {
 		    $(this).attr('tabindex', '1');

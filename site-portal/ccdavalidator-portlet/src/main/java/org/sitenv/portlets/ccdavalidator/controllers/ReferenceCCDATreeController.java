@@ -53,7 +53,7 @@ public class ReferenceCCDATreeController extends TreeController {
 		
 		Map map = new HashMap();
 		Gson gson = new Gson();
-		String json = gson.toJson(this.getRoots());
+		String json = gson.toJson(this.getTree().getRoots());
 		map.put("jsonRoot", json);
 		
 		return new ModelAndView("referenceCCDATreeJsonView", map);

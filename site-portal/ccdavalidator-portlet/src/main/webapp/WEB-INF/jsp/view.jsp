@@ -24,7 +24,13 @@
     	<portlet:param name="javax.portlet.action" value="referenceCCDATree"/>
       </portlet:actionURL>
       
+      <portlet:actionURL var="referenceCCDAIncorpTree" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+    	<portlet:param name="javax.portlet.action" value="referenceCCDAIncorpTree"/>
+      </portlet:actionURL>
       
+      <portlet:actionURL var="negativeTestCCDATree" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+    	<portlet:param name="javax.portlet.action" value="negativeTestCCDATree"/>
+      </portlet:actionURL>
       
       <portlet:actionURL var="urlAction1_1" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
     	<portlet:param name="javax.portlet.action" value="uploadCCDA1.1"/>
@@ -69,12 +75,13 @@
       <portlet:resourceURL id="downloadVendorIncorporation"  var="downloadVendorIncorporationAction">
       </portlet:resourceURL>
       
-      <portlet:resourceURL id="downloadReferenceIncorporation"  var="downloadReferenceIncorporationAction">
+      <portlet:resourceURL id="downloadReferenceTreeIncorporation"  var="downloadReferenceTreeIncorporationAction">
       </portlet:resourceURL>
       
-      <portlet:resourceURL id="downloadNegativeTesting"  var="downloadNegativeTestingAction">
+      <portlet:resourceURL id="downloadNegativeTestTreeIncorporation"  var="downloadNegativeTestTreeIncorporationAction">
       </portlet:resourceURL>
       
+            
       
       <portlet:defineObjects />
       
@@ -99,8 +106,8 @@
     	
     	var reconciledCCDATreeURL = '${reconciledCCDATree}';
     	var referenceCCDATreeURL = '${referenceCCDATree}'; 
-    	
-    	
+    	var referenceCCDAIncorpTreeURL = '${referenceCCDAIncorpTree}';
+    	var negativeTestCCDATreeURL = '${negativeTestCCDATree}';
       </script>
       
       
@@ -617,67 +624,117 @@
   			
   			<div class="panel-group well" id="IncorporationAccordion">
   			
-			  <div class="panel panel-default">
+			  
+			  
+			  
+			  <div class="panel panel-default" style="overflow: visible;">
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
-			        <a data-toggle="collapse" data-parent="#IncorporationAccordion" href="#collapseNegativeTesting" tabindex="1">
-			          C-CDAs for Negative Testing 
-			        </a>
-			      </h4>
-			    </div>
-			    <div id="collapseNegativeTesting" class="panel-collapse collapse"> 
-			      <div class="panel-body">
-			      
-			      	<!--<a href="http://wiki.siframework.org/Companion+Guide+to+Consolidated+CDA+for+MU2"> (Download as .zip)</a>-->
-		
-			        <div class="list-group download-list">
-			        
-			        	<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=0" style="width: 100%;" tabindex="1">Get All Negative Testing C-CDAs</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=1"  style="width: 100%;" tabindex="1">Ambulatory: Incorrect Coding of ImmunizationData</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=2"  style="width: 100%;" tabindex="1">Ambulatory: Incorrect Coding of Lab Results Data</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=3" style="width: 100%;" tabindex="1">Ambulatory: Incorrect Coding of Procedures Data</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=4"  style="width: 100%;" tabindex="1">Ambulatory: Incorrect Coding of Vital Signs Data</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=5"  style="width: 100%;" tabindex="1">Ambulatory: Invalid CS</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=6" style="width: 100%;" tabindex="1">Ambulatory: Invalid Data Types</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=7"  style="width: 100%;" tabindex="1">Ambulatory: Missing MU2 Elements</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=8"  style="width: 100%;" tabindex="1">Ambulatory: Missing Narrative</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=9" style="width: 100%;" tabindex="1">Inpatient: Code not in Value Set</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=10"  style="width: 100%;" tabindex="1">Inpatient: Incorrect coding of Allergies Data</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=11"  style="width: 100%;" tabindex="1">Inpatient: Incorrect Coding of Medication Data</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=12" style="width: 100%;" tabindex="1">Inpatient: Incorrect Coding of Problems Data</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=13"  style="width: 100%;" tabindex="1">Inpatient: Incorrect Missing Template IDs</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=14"  style="width: 100%;" tabindex="1">Inpatient: Poorly Formed</a>
-			      		<a class="list-group-item" href="${downloadNegativeTestingAction}&getCCDA=15" style="width: 100%;" tabindex="1">Inpatient: Wrong Template IDs</a>
-			      		
-			    	</div>
-			      </div>
-			    </div>
-			  </div>
-			  <div class="panel panel-default">
-			    <div class="panel-heading">
-			      <h4 class="panel-title">
-			        <a data-toggle="collapse" data-parent="#IncorporationAccordion" href="#collapseReference" tabindex="1">
+			        <a data-toggle="collapse" data-parent="#IncorporationAccordion" href="#collapseReference1" tabindex="1">
 			          Reference C-CDAs for Incorporation
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseReference" class="panel-collapse collapse">
+			    
+			    <div id="collapseReference1" class="panel-collapse collapse" >
 			      <div class="panel-body">
-			        <div class="list-group download-list">
 			        
-			        	<a class="list-group-item" href="${downloadReferenceIncorporationAction}&getCCDA=1" style="width: 100%;" tabindex="1">Ambulatory Summary</a>
-			      		<a class="list-group-item" href="${downloadReferenceIncorporationAction}&getCCDA=2" style="width: 100%;" tabindex="1">Inpatient Summary</a>
-			        
-			        	<%--<a class="list-group-item" href="${downloadReferenceIncorporationAction}&getCCDA=0" style="width: 100%;" tabindex="1">Base C-CDA</a>
-			      		<a class="list-group-item" href="${downloadReferenceIncorporationAction}&getCCDA=1" style="width: 100%;" tabindex="1">C-CDA 1 for Incorporation</a>
-			      		<a class="list-group-item" href="${downloadReferenceIncorporationAction}&getCCDA=2" style="width: 100%;" tabindex="1">C-CDA 2 for Incorporation</a>
-			      		<a class="list-group-item" href="${downloadReferenceIncorporationAction}&getCCDA=3" style="width: 100%;" tabindex="1">C-CDA 3 for Incorporation</a>
-			      		<a class="list-group-item" href="${downloadReferenceIncorporationAction}&getCCDA=4" style="width: 100%;" tabindex="1">C-CDA 4 for Incorporation</a>
-			      		--%>
-			    	</div>
+			         <div class="tab-pane active" id="refIncorp">
+			           <div id="refIncorpFormWrapper">
+			          
+			              <form id="refIncorpForm" action="${downloadReferenceTreeIncorporationAction}" method="POST">
+			              
+			              <p>
+							<noscript><input type="hidden" name="redirect" value="true"  /></noscript>
+							<div id="refIncorperrorlock" style="position: relative;">
+								<div class="row">
+								<div class="col-md-12">
+								<label for="dLabel1">Select a Reference C-CDA File to Download:</label><br/>
+												<div class="dropdown">
+													<button id="dLabel1" data-toggle="dropdown"
+														class="btn btn-success dropdown-toggle validate[funcCall[incorpRequired]]" type="button" tabindex="1">
+														Pick Sample <i class="glyphicon glyphicon-play"></i>
+													</button>
+			
+													<ul class="dropdown-menu rightMenu" role="menu" aria-labelledby="dLabel1" style=" overflow: scroll; /* position: absolute; */ ">
+														<li>
+															<div id="refccdafiletreepanel"></div>
+														</li>
+													</ul>
+												</div>
+												<div><span id="refIncorpfilePathOutput"></span></div>
+								</div>
+								</div>
+							</div>
+							<hr />
+							<button id="refIncorpCCDAsubmit" type="submit"
+								class="btn btn-primary start" onclick="return false;"  tabindex="1">
+								<i class="glyphicon glyphicon-download"></i> <span>Download File</span>
+							</button>
+							<input id="refIncorpfilepath"
+									name="refIncorpfilepath" type="hidden">
+			              </form>
+			           </div>
+			        </div>
 			      </div>
 			    </div>
 			  </div>
+			  
+			
+			  <div class="panel panel-default" style="overflow: visible;">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#IncorporationAccordion" href="#collapseNegTestDownload" tabindex="1">
+			          C-CDAs for Negative Testing
+			        </a>
+			      </h4>
+			    </div>
+			    
+			    <div id="collapseNegTestDownload" class="panel-collapse collapse" >
+			      <div class="panel-body">
+			        
+			         <div class="tab-pane active" id="negTest">
+			           <div id="negTestFormWrapper">
+			          
+			              <form id="negTestForm" action="${downloadNegativeTestTreeIncorporationAction}" method="POST">
+			              
+			              <p>
+							<noscript><input type="hidden" name="redirect" value="true"  /></noscript>
+							<div id="negTesterrorlock" style="position: relative;">
+								<div class="row">
+								<div class="col-md-12">
+								<label for="dLabel2">Select a C-CDA File to Download:</label><br/>
+												<div class="dropdown">
+													<button id="dLabel2" data-toggle="dropdown"
+														class="btn btn-success dropdown-toggle validate[funcCall[incorpRequired]]" type="button" tabindex="1">
+														Pick Sample <i class="glyphicon glyphicon-play"></i>
+													</button>
+			
+													<ul class="dropdown-menu rightMenu" role="menu" aria-labelledby="dLabel2" style=" overflow: scroll; /* position: absolute; */ ">
+														<li>
+															<div id="negTestccdafiletreepanel"></div>
+														</li>
+													</ul>
+												</div>
+												<div><span id="negTestfilePathOutput"></span></div>
+								</div>
+								</div>
+							</div>
+							<hr />
+							<button id="negTestCCDAsubmit" type="submit"
+								class="btn btn-primary start" onclick="return false;"  tabindex="1">
+								<i class="glyphicon glyphicon-download"></i> <span>Download File</span>
+							</button>
+							<input id="negTestfilepath"
+									name="negTestfilepath" type="hidden">
+			              </form>
+			           </div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			  
+			  
 			  <div class="panel panel-default" style="overflow: visible;">
 			    <div class="panel-heading">
 			      <h4 class="panel-title">

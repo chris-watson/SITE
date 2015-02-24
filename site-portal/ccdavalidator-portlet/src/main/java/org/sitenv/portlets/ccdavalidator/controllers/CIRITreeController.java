@@ -50,7 +50,7 @@ public class CIRITreeController extends TreeController {
 			throws IOException {
 		Map map = new HashMap();
 		Gson gson = new Gson();
-		String json = gson.toJson(this.getRoots());
+		String json = gson.toJson(this.getTree().getRoots());
 		map.put("jsonRoot", json);
 		return new ModelAndView("reconciledCCDATreeJsonView", map);
 	}

@@ -6,32 +6,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.sitenv.common.utilities.controller.BaseController;
+import org.sitenv.portlets.ccdavalidator.JSTreeResults;
 import org.sitenv.portlets.ccdavalidator.models.SampleCCDATreeNode;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class TreeController extends BaseController {
 
 	public TreeController() {
 	}
-	
-	private ArrayList<SampleCCDATreeNode> roots = new ArrayList<SampleCCDATreeNode>();;
+		
+	@Autowired
+	JSTreeResults tree;
 	
 	public abstract String getControllerName();
 	
-	public ArrayList<SampleCCDATreeNode> getRoots(){
-		return roots;
+	public JSTreeResults getTree(){
+		return tree;
 	}
 	
 	protected void traverseDir(String dirPath) throws IOException{
 		this.traverseDir(dirPath, dirPath, null, 1);
 	}
 	
-	protected void traverseDir(String basePath, String path, SampleCCDATreeNode root, int deep)
+	protected void traverseDir(
+			String basePath, String path, SampleCCDATreeNode root, int deep)
 			throws IOException {
 		
-		if (this.props == null) {
-			this.loadProperties();
-		}
-
+		
 		File[] files = (new File(path)).listFiles();
 
 		if (files == null)
@@ -53,7 +54,7 @@ public abstract class TreeController extends BaseController {
 									getControllerName()+"_%d_%d", deep, count), "helloword");
 					folder.getMetadata().setDescription("This is CCDA file 1.");
 					if (root == null) { // check for null
-						roots.add(folder);
+						tree.addRoot(folder);
 					} else {
 						root.addChild(folder);
 					}
@@ -71,7 +72,7 @@ public abstract class TreeController extends BaseController {
 									+ "/", ""));
 					
 					if (root == null) { // check for null
-						roots.add(folder);
+						tree.addRoot(folder);
 					} else {
 						root.addChild(folder);
 					}

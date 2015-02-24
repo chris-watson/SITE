@@ -230,6 +230,46 @@ public class DownloadIncorporationController extends BaseController {
 	}
 	
 	
+	@ResourceMapping("downloadReferenceIncorpTree")
+	public void serveReferenceIncorpFile(ResourceRequest resourceRequest, ResourceResponse res) throws PortletException, IOException {
+		
+		if (this.props == null)
+		{
+			this.loadProperties();
+		}
+		
+		String downloadPath = props.getProperty("referenceCcdasForIncorporation") + "/" + resourceRequest.getParameter("reconciledBundleFilepath");
+		
+		
+		String[] downloadPathTokens = downloadPath.split("[/\\\\]");
+		String fileName = downloadPathTokens[downloadPathTokens.length-1];
+		
+		
+		File downloadFile = new File(downloadPath);
+		InputStream in = new FileInputStream(downloadFile);
+		
+		res.setContentType("application/xml");
+		res.addProperty(HttpHeaders.CACHE_CONTROL,
+				"max-age=3600, must-revalidate");
+		res.addProperty(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""
+				+ fileName + "\"");
+		// Use this to directly download the file
+		res.addProperty("Set-Cookie", "fileDownload=true; path=/");
+		
+		
+		OutputStream out = res.getPortletOutputStream();
+		
+		copyStream(in, out);
+		out.flush();
+		out.close();
+		in.close();
+		statisticsManager.addReferenceCcdaDownload(fileName);
+		
+	}
+	
+	
+	
+	
 	@ResourceMapping("downloadReferenceTestData")
 	public void serveReferenceTestData(ResourceRequest resourceRequest, ResourceResponse res) throws PortletException, IOException {
 		
