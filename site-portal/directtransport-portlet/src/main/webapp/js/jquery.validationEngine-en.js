@@ -201,6 +201,23 @@
 	            },
 	            "maxCertFileSize":{
 	            	"func": function(field, rules, i, options) {
+	            		
+	            			if ((bowser.msie && bowser.version <= 9)) {
+	            				return true;
+	                       
+	            			} else {
+	            				
+			            		var uploadedFile = field[0].files[0];
+			            		
+			            		if (uploadedFile && field.val() && uploadedFile.size > (3*1024*1024)) {
+			            			return false;
+			                    }
+			                    else {
+			                        return true;
+			                    }
+	                       }
+	            		
+	            		/*
 	            		var uploadedFile = $('#anchoruploadfile')[0].files[0];
 	            		
 	            		if (uploadedFile  && $('#anchoruploadfile').val() && uploadedFile.size > (3*1024*1024)) {
@@ -208,7 +225,8 @@
 	                    }
 	                    else {
 	                        return true;
-	                    }     
+	                    } 
+	                    */    
 	            	},
 	            	"alertText" : "* The uploaded file exceeds the maximum file size of 3 MB."
 	            }

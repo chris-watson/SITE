@@ -79,6 +79,8 @@ public class QrdaValiationController {
 	private static final Log logger = LogFactoryUtil
 			.getLog(QrdaValiationController.class);
 	
+	@Autowired
+	Validator fileValidator;
 
 	@Autowired
 	private StatisticsManager statisticsManager;
@@ -255,8 +257,7 @@ public class QrdaValiationController {
 		return "qrdaSandboxGUI";
 	}
 
-	@Autowired
-	Validator fileValidator;
+
 
 	// normal post back handler, if user disabled the javascript.
 	@ActionMapping("uploadFile")

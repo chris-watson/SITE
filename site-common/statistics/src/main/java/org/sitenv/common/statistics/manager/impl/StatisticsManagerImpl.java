@@ -4,6 +4,7 @@ package org.sitenv.common.statistics.manager.impl;
 import java.util.List;
 
 import org.sitenv.common.statistics.dao.AggregateDAO;
+import org.sitenv.common.statistics.dao.CcdaServiceDAO;
 import org.sitenv.common.statistics.dao.CcdaValidationDAO;
 import org.sitenv.common.statistics.dao.DcdtHostingVerificationDAO;
 import org.sitenv.common.statistics.dao.DirectTransmissionDAO;
@@ -35,6 +36,9 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	private CcdaValidationDAO ccdaValidationDAO;
 	
 	@Autowired
+	private CcdaServiceDAO ccdaServiceDAO;
+	
+	@Autowired
 	private QrdaValidationDAO qrdaValidationDAO;
 	
 	@Autowired
@@ -45,6 +49,7 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	
 	@Autowired
 	private AggregateDAO aggregateDAO;
+	
 	
 	@Autowired
 	private DcdtHostingVerificationDAO dcdtHostingVerificationDAO;
@@ -59,11 +64,19 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	
 	@Transactional
 	public void addCcdaValidation(String testType, Boolean hasErrors, Boolean hasWarnings,
-			Boolean hasInfo, Boolean hasHttpError) {
+			Boolean hasInfo, Boolean hasHttpError, String validator) {
 		
-		ccdaValidationDAO.createCcdaValidation(testType, hasErrors, hasWarnings, hasInfo, hasHttpError);
-		
+		ccdaValidationDAO.createCcdaValidation(testType, hasErrors, hasWarnings, hasInfo, hasHttpError, validator);
 	}
+	
+	
+	@Transactional
+	public void addCcdaServiceCall(String testType, Boolean hasErrors, Boolean hasWarnings, Boolean hasInfo, 
+			Boolean hasHttpError, String validator){
+		
+		ccdaServiceDAO.createCcdaServiceCall(testType, hasErrors, hasWarnings, hasInfo, hasHttpError, validator);
+	}
+	
 
 	@Transactional
 	public Long getSuccessfulCcdaValidationCount(Integer numOfDays) {
@@ -106,6 +119,12 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	public void addCcdaDownload() {
 		this.ccdaValidationDAO.createCcdaDownload();
 	}
+	
+	@Transactional
+	public void addReferenceCcdaDownload(String fileName){
+		this.ccdaValidationDAO.createCcdaReferenceDownload(fileName);
+	}
+	
 
 	@Transactional
 	public Long getSmartCcdaCount(Integer numOfDays) {

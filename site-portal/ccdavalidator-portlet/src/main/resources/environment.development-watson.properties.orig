@@ -1,0 +1,18 @@
+<<<<<<< HEAD
+CCDAValidationServiceURL=http://localhost:7080/CCDAValidatorServices
+SmartCCDARemoteServiceUrl=http://ccda-scorecard.smartplatforms.org/v1/ccda-scorecard/request
+SmartCCDARemoteRubricsUrl=http://ccda-scorecard.smartplatforms.org/v1/ccda-scorecard/rubrics
+
+samplesFromVendorsForIncorporation=C:\\SITE\\CCDA_GIT\\SampleCCDAsForIncorporation\\SamplesFromVendors\\sample_ccdas
+referenceCcdasForIncorporation=C:\\SITE\\CCDA_GIT\\SampleCCDAsForIncorporation\\ReferenceSamples
+CcdasForNegativeTesting=C:\\SITE\\CCDA_GIT\\SampleCCDAsForIncorporation\\NegativeTestingSamples
+=======
+CCDAValidationServiceURL=http://localhost:7080/CCDAValidatorServices
+SmartCCDARemoteServiceUrl=http://ccda-scorecard.smartplatforms.org/v1/ccda-scorecard/request
+SmartCCDARemoteRubricsUrl=http://ccda-scorecard.smartplatforms.org/v1/ccda-scorecard/rubrics
+
+samplesFromVendorsForIncorporation=C:\\SITE\\CCDA_GIT\\SampleCCDAsForIncorporation\\SamplesFromVendors\\sample_ccdas
+referenceCcdasForIncorporation=C:\\SITE\\CCDA_GIT\\SampleCCDAsForIncorporation\\ReferenceSamples
+CcdasForNegativeTesting=C:\\SITE\\CCDA_GIT\\SampleCCDAsForIncorporation\\NegativeTestingSamples
+TestInputFile=C:\\SITE\\CCDA_GIT\\SampleCCDAsForIncorporation\\TestInputFiles
+>>>>>>> develop-cwatson-ccda-multi-TEST

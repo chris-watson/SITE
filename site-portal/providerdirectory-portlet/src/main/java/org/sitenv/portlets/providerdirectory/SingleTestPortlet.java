@@ -29,7 +29,8 @@ public class SingleTestPortlet extends MVCPortlet {
     	testCaseNames.add("Find_Organizations_for_Unique_Individual");
     	testCaseNames.add("Find_Individuals_for_Unique_Organization");
     	testCaseNames.add("Find_Individuals_and_Organizations");
-    	testCaseNames.add("dup_req_id_federation_loop_test");
+    	testCaseNames.add("Find_Members_for_Unique_Relationship");
+    	testCaseNames.add("Find_Federated_Group");
     	
     	testCaseRealNames = new HashMap<String, String>();
     	testCaseRealNames.put("search_provider_by_name", "Search Provider by Name");
@@ -44,8 +45,8 @@ public class SingleTestPortlet extends MVCPortlet {
     	testCaseRealNames.put("Find_Organizations_for_Unique_Individual", "Find Organizations for Unique Individual");
     	testCaseRealNames.put("Find_Individuals_for_Unique_Organization", "Find Individuals for Unique Organization");
     	testCaseRealNames.put("Find_Individuals_and_Organizations", "Find Individuals and Organizations");
-    	testCaseRealNames.put("dup_req_id_federation_loop_test", "Federation Loop Test");
-    	testCaseRealNames.put("dup_req_id_federation_loop_test_hpdplus", "Federation Loop Test");
+    	testCaseRealNames.put("Find_Members_for_Unique_Relationship", "Find Members for Unique Relationship");
+    	testCaseRealNames.put("Find_Federated_Group", "Find Federated Group");
     	
     }
 

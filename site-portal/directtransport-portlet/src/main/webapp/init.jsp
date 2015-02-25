@@ -30,8 +30,5 @@
 String currentURL = PortalUtil.getCurrentURL(request);
  
 ResourceBundle resource = ResourceBundle.getBundle("environment");
- 
-
-String ServiceContext = resource.getString("serviceContext"); 
 
 %>

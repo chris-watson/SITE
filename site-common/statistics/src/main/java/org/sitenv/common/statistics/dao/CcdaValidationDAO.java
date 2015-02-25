@@ -6,11 +6,13 @@ import org.sitenv.common.statistics.dto.CcdaWeeklyCounts;
 
 public interface CcdaValidationDAO {
 	
-	public void createCcdaValidation(String testType, Boolean hasErrors, Boolean hasWarnings, Boolean hasInfo, Boolean hasHttpError);
+	public void createCcdaValidation(String testType, Boolean hasErrors, Boolean hasWarnings, Boolean hasInfo, Boolean hasHttpError, String validator);
 	
 	public void createSmartCcdaValidation(Boolean hasHttpError);
 	
 	public void createCcdaDownload();
+	
+	public void createCcdaReferenceDownload(String fileName);
 	
 	
 	public Long getErrorCount(Boolean hasErrors, Integer numOfDays);

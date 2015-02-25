@@ -116,14 +116,8 @@
 
 <!-- Result panel for the regular postback. -->   
  <noscript>  
-  <h3>Result:</h3>  
+  <h3>Result:</h3>
   <p>${results}</p>
-  <!-- <ul style="color: red;font-weight: bold">
-  <c:forEach var="entry" items="${results}">
-  	<li>${entry}</li>
-  </c:forEach>
-  </ul>
-   -->
 </noscript>
 
   

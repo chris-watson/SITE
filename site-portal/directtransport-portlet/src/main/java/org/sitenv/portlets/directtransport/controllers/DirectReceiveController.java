@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import org.sitenv.common.utilities.controller.BaseController;
 import org.sitenv.common.utilities.encryption.DesEncrypter;
 import org.sitenv.common.statistics.manager.StatisticsManager;
+import org.sitenv.portlets.directtransport.DirectReceiveResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,9 +61,11 @@ public class DirectReceiveController  extends BaseController
 	
 	private static final long serialVersionUID = 1L;
 	
-	private JSONArray fileJson = null;
-	private JSONObject uploadResult = null;
-	private JSONObject precannedResult = null;
+
+	
+	@Autowired
+	private DirectReceiveResults directRecieveResults;
+	
 	
 	@Autowired
 	private StatisticsManager statisticsManager;
@@ -97,9 +100,12 @@ public class DirectReceiveController  extends BaseController
 		endPointEmail = request.getParameter("ccdauploademail");
 		String domain = endPointEmail.split(delimiter)[1];
 		
-		fileJson = new JSONArray();
+		//fileJson = new JSONArray();
+		directRecieveResults.setFileJson(new JSONArray());
 		
-		uploadResult = new JSONObject();
+		directRecieveResults.setUploadResult(new JSONObject());
+		
+		
 		
 		try{
 			
@@ -107,7 +113,7 @@ public class DirectReceiveController  extends BaseController
 			jsono.put("name", file.getOriginalFilename());
 			jsono.put("size", file.getSize());
 
-			fileJson.put(jsono);
+			directRecieveResults.getFileJson().put(jsono);
 			
 			fileName = new File(file.getOriginalFilename()).getName();
 			
@@ -121,20 +127,20 @@ public class DirectReceiveController  extends BaseController
 		} catch (FileUploadException e) {
 			if(e.getMessage().endsWith("bytes.")) {
 				statisticsManager.addDirectReceive(domain, true, false, true);
-				uploadResult.put("IsSuccess", "false");
-				uploadResult.put("ErrorMessage", "Maxiumum file size exceeeded. " + 
+				directRecieveResults.getUploadResult().put("IsSuccess", "false");
+				directRecieveResults.getUploadResult().put("ErrorMessage", "Maxiumum file size exceeeded. " + 
 						"Please return to the previous page and select a file that is less than "
 						+ MAX_FILE_SIZE / 1024 / 1024 + "MB(s).");
 			} else {
 				statisticsManager.addDirectReceive(domain, true, false, true);
-				uploadResult.put("IsSuccess", "false");
-				uploadResult.put("ErrorMessage", "There was an error uploading the file: " + e.getMessage());
+				directRecieveResults.getUploadResult().put("IsSuccess", "false");
+				directRecieveResults.getUploadResult().put("ErrorMessage", "There was an error uploading the file: " + e.getMessage());
 				
 			}
 		} catch (Exception e) {
 			statisticsManager.addDirectReceive(domain, true, false, true);
-			uploadResult.put("IsSuccess", "false");
-			uploadResult.put("ErrorMessage", "There was an error saving the file: " + e.getMessage());
+			directRecieveResults.getUploadResult().put("IsSuccess", "false");
+			directRecieveResults.getUploadResult().put("ErrorMessage", "There was an error saving the file: " + e.getMessage());
 		}
 		
 		if(uploadSuccess)
@@ -193,14 +199,17 @@ public class DirectReceiveController  extends BaseController
 		        
 		        Transport.send(message);
 	 
-				uploadResult.put("IsSuccess", "true");
-				uploadResult.put("ErrorMessage", "Mail sent.");
+		        directRecieveResults.getUploadResult().put("IsSuccess", "true");
+		        directRecieveResults.getUploadResult().put("ErrorMessage", "Mail sent.");
 				statisticsManager.addDirectReceive(domain, true, false, false);
 				
 			} catch (MessagingException e) {
 				statisticsManager.addDirectReceive(domain, true, false, true);
-				uploadResult.put("IsSuccess", "false");
-				uploadResult.put("ErrorMessage", "Failed to send email due to eror: " + e.getMessage());
+				directRecieveResults.getUploadResult().put("IsSuccess", "false");
+				directRecieveResults.getUploadResult().put("ErrorMessage", "Failed to send email due to eror: " + e.getMessage());
+				
+				e.printStackTrace();
+				
 			} 
 			
 			
@@ -212,9 +221,9 @@ public class DirectReceiveController  extends BaseController
 			throws IOException {
 		Map map = new HashMap();
 
-		map.put("files", fileJson);
+		map.put("files", directRecieveResults.getFileJson());
 
-		map.put("result", uploadResult);
+		map.put("result", directRecieveResults.getUploadResult());
 
 		return new ModelAndView("genericResultJsonView", map);
 	}
@@ -253,7 +262,7 @@ public class DirectReceiveController  extends BaseController
 		endPointEmail = request.getParameter("precannedemail");
 		String domain = endPointEmail.split(delimiter)[1];
 		
-		precannedResult = new JSONObject();
+		directRecieveResults.setPrecannedResult(new JSONObject());
 		
 		
 		
@@ -311,14 +320,17 @@ public class DirectReceiveController  extends BaseController
 	        
 	        Transport.send(message);
  
-			precannedResult.put("IsSuccess", "true");
-			precannedResult.put("ErrorMessage", "Mail sent.");
+	        directRecieveResults.getPrecannedResult().put("IsSuccess", "true");
+	        directRecieveResults.getPrecannedResult().put("ErrorMessage", "Mail sent.");
 			statisticsManager.addDirectReceive(domain, false, true, false);
 			
 		} catch (MessagingException e) {
 			statisticsManager.addDirectReceive(domain, false, true, true);
-			precannedResult.put("IsSuccess", "false");
-			precannedResult.put("ErrorMessage", "Failed to send email due to eror: " + e.getMessage());
+			directRecieveResults.getPrecannedResult().put("IsSuccess", "false");
+			directRecieveResults.getPrecannedResult().put("ErrorMessage", "Failed to send email due to eror: " + e.getMessage());
+			
+			e.printStackTrace();
+			
 		} 
 			
 			
@@ -331,7 +343,7 @@ public class DirectReceiveController  extends BaseController
 
 		map.put("files", null);
 
-		map.put("result", precannedResult);
+		map.put("result", directRecieveResults.getPrecannedResult());
 
 		return new ModelAndView("genericResultJsonView", map);
 	}

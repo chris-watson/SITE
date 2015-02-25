@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import org.nhindirect.trustbundle.core.CreateUnSignedPKCS7;
 import org.sitenv.common.utilities.controller.BaseController;
 import org.sitenv.common.statistics.manager.StatisticsManager;
+import org.sitenv.portlets.directtransport.TrustBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,8 +66,8 @@ public class TrustBundleController extends BaseController {
 	@Autowired
 	private StatisticsManager statisticsManager;
 
-	private JSONArray fileJson = null;
-	private JSONObject result = null;
+	@Autowired
+	private TrustBundle trustBundleObj;
 
 	@ResourceMapping("getTrustBundle")
 	public void getTrustBundle(ResourceRequest request,
@@ -144,13 +145,13 @@ public class TrustBundleController extends BaseController {
 		response.setRenderParameter("javax.portlet.action", "uploadTrustAnchor");
 		MultipartFile file = request.getFile("anchoruploadfile");
 
-		fileJson = new JSONArray();
+		trustBundleObj.setFileJson(new JSONArray());
 
 		Boolean uploadSuccess = false;
 		String savedFilePath = null;
 		String errorMsg = null;
 
-		result = new JSONObject();
+		trustBundleObj.setResult(new JSONObject());
 
 		String uploadAnchorFileDir = props.getProperty("trustAnchorDir");
 		String trustBundleFile = props.getProperty("trustBundleFile");
@@ -160,7 +161,7 @@ public class TrustBundleController extends BaseController {
 			jsono.put("name", file.getOriginalFilename());
 			jsono.put("size", file.getSize());
 
-			fileJson.put(jsono);
+			trustBundleObj.getFileJson().put(jsono);
 
 			try {
 
@@ -285,14 +286,16 @@ public class TrustBundleController extends BaseController {
 
 				if (errorMsg != null) {
 					
-					result.put("IsSuccess", "false");
-					result.put("ErrorMessage", errorMsg);
+					
+					trustBundleObj.getResult().put("IsSuccess", "false");
+					trustBundleObj.getResult().put("ErrorMessage", errorMsg);
+					
 					
 					statisticsManager.addDirectTrustUpload(true);
 				} else {
 					
-					result.put("IsSuccess", "true");
-					result.put(
+					trustBundleObj.getResult().put("IsSuccess", "true");
+					trustBundleObj.getResult().put(
 							"ErrorMessage",
 							"Upload succeeded, it may take up to five minutes for the server to receive your trust anchor.(Click to hide this message)");
 					
@@ -300,8 +303,8 @@ public class TrustBundleController extends BaseController {
 				}
 			} else {
 				
-				result.put("IsSuccess", "false");
-				result.put("ErrorMessage", errorMsg);
+				trustBundleObj.getResult().put("IsSuccess", "false");
+				trustBundleObj.getResult().put("ErrorMessage", errorMsg);
 				statisticsManager.addDirectTrustUpload(true);
 			}
 		} catch (JSONException e) {
@@ -315,9 +318,9 @@ public class TrustBundleController extends BaseController {
 			throws IOException {
 		Map map = new HashMap();
 
-		map.put("files", fileJson);
+		map.put("files", trustBundleObj.getFileJson());
 
-		map.put("result", result);
+		map.put("result", trustBundleObj.getResult());
 
 		return new ModelAndView("genericResultJsonView", map);
 	}

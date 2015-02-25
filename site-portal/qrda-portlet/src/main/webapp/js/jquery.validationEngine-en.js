@@ -200,14 +200,20 @@
 	            },
 	            "maxCCDAFileSize":{
 	            	"func": function(field, rules, i, options) {
-	            		var uploadedFile = $('#qrdauploadfile')[0].files[0];
-	            		
-	            		if (uploadedFile  && $('#qrdauploadfile').val() && uploadedFile.size > (3*1024*1024)) {
-	            			return false;
-	                    }
-	                    else {
+	            		if ((bowser.msie && bowser.version <= 9)) {
+	                        
 	                        return true;
-	                    }     
+	                       } else {
+			                    
+			            		var uploadedFile = field[0].files[0];
+			            		
+			            		if (uploadedFile && field.val() && uploadedFile.size > (3*1024*1024)) {
+			            			return false;
+			                    }
+			                    else {
+			                        return true;
+			                    }
+	                       }
 	            	},
 	            	"alertText" : "* The uploaded file exceeds the maximum file size of 3 MB."
 	            }

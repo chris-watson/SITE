@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import org.sitenv.common.statistics.dao.CcdaValidationDAO;
 import org.sitenv.common.statistics.dto.CcdaWeeklyCounts;
 import org.sitenv.common.statistics.entity.CcdaDownloadEntity;
+import org.sitenv.common.statistics.entity.CcdaReferenceDownloadEntity;
 import org.sitenv.common.statistics.entity.CcdaValidationEntity;
 import org.sitenv.common.statistics.entity.CcdaWeeklyCountsEntity;
 import org.sitenv.common.statistics.entity.SmartCcdaValidationEntity;
@@ -20,7 +21,7 @@ public class CcdaValidationDAOImpl extends BaseDAOImpl implements CcdaValidation
 
 	
 	public void createCcdaValidation(String testType, Boolean hasErrors, Boolean hasWarnings,
-			Boolean hasInfo, Boolean hasHttpError) {
+			Boolean hasInfo, Boolean hasHttpError, String validator) {
 		CcdaValidationEntity entity = new CcdaValidationEntity();
 		
 		entity.setErrors(hasErrors);
@@ -28,6 +29,7 @@ public class CcdaValidationDAOImpl extends BaseDAOImpl implements CcdaValidation
 		entity.setInfo(hasInfo);
 		entity.setHttpError(hasHttpError);
 		entity.setValidationType(testType);
+		entity.setValidator(validator);
 		
 		entityManager.persist(entity);
 	}
@@ -45,6 +47,14 @@ public class CcdaValidationDAOImpl extends BaseDAOImpl implements CcdaValidation
 		
 		entityManager.persist(entity);
 	}
+	
+	public void createCcdaReferenceDownload(String fileName) {
+		CcdaReferenceDownloadEntity entity = new CcdaReferenceDownloadEntity();
+		entity.setFileName(fileName);
+		
+		entityManager.persist(entity);
+	}
+	
 	
 	
 	public Long getHttpErrorCount(Boolean hasHttpError, Integer numOfDays) {
@@ -258,6 +268,7 @@ public class CcdaValidationDAOImpl extends BaseDAOImpl implements CcdaValidation
 		return returnVal;
 		
 	}
+
 	
 	public Long getCcdaLogCounts()
 	{

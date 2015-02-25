@@ -20,6 +20,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.sitenv.common.utilities.controller.BaseController;
 import org.sitenv.common.statistics.manager.StatisticsManager;
+import org.sitenv.portlets.ccdavalidator.SmartCCDAResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +36,9 @@ public class SmartCCDAValidatorController extends BaseController {
 
 	private Logger logger = Logger.getLogger(SmartCCDAValidatorController.class);
 	
-	private String smartCcdaResponse = null;
-	private String smartCcdaRubricResponse = null;
+	
+	@Autowired
+	private SmartCCDAResponse responseObj;
 	
 	@Autowired
 	private StatisticsManager statisticsManager;
@@ -93,9 +95,9 @@ public class SmartCCDAValidatorController extends BaseController {
 				// do the error handling.
 				throw new Exception("Could not Relay Request to Remote Service.");
 			}
-
-			smartCcdaResponse = handler.handleResponse(relayResponse);
-
+			
+			responseObj.setSmartCcdaResponse(handler.handleResponse(relayResponse));
+			
 			// fetch the rubric look up table.
 			HttpGet getRubricRequest = new HttpGet(props.getProperty("SmartCCDARemoteRubricsUrl"));
 			HttpResponse getRubricResponse = client.execute(getRubricRequest);
@@ -105,7 +107,8 @@ public class SmartCCDAValidatorController extends BaseController {
 
 				throw new Exception("Could not Relay Request to Remote Rubric Service.");
 			}
-			smartCcdaRubricResponse = handler.handleResponse(getRubricResponse);
+			
+			responseObj.setSmartCcdaRubricResponse(handler.handleResponse(getRubricResponse));
 			
 			statisticsManager.addSmartCcdaValidation(false);
 
@@ -114,9 +117,6 @@ public class SmartCCDAValidatorController extends BaseController {
 
 			statisticsManager.addSmartCcdaValidation(true);
 		}
-
-		
-
 	}
 
 	@RequestMapping(params = "javax.portlet.action=smartCCDA")
@@ -124,9 +124,9 @@ public class SmartCCDAValidatorController extends BaseController {
 			throws IOException {
 		Map map = new HashMap();
 
-		map.put("smartCcdaResponse", smartCcdaResponse);
+		map.put("smartCcdaResponse", responseObj.getSmartCcdaResponse());//smartCcdaResponse);
 
-		map.put("smartCcdaRubricResponse", smartCcdaRubricResponse);
+		map.put("smartCcdaRubricResponse", responseObj.getSmartCcdaRubricResponse()); //smartCcdaRubricResponse);
 
 		return new ModelAndView("smartCCDAValidatorJsonView", map);
 	}

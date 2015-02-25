@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
+
 @Entity
 @Table(name="ccda_download")
 public class CcdaDownloadEntity {

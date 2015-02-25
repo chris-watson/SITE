@@ -44,7 +44,7 @@ public class SingleTestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static final String BASE_DN_PROPERTY = "project.test.server.dsml.dn.base";
     private static final String URL_PROPERTY = "project.test.server.wsdl.url";
-    private static final String MSPD_SOAPUI_PROJECT_FILE = "soapui-project_hpdplus.xml";
+    //private static final String MSPD_SOAPUI_PROJECT_FILE = "soapui-project_hpdplus.xml";
     private static final String IHE_SOAPUI_PROJECT_FILE = "soapui-project.xml";
 
     private static WsdlProject IHE_WSDL_PROJECT;
@@ -72,7 +72,8 @@ public class SingleTestServlet extends HttpServlet {
     	testCaseNames.add("Find_Organizations_for_Unique_Individual");
     	testCaseNames.add("Find_Individuals_for_Unique_Organization");
     	testCaseNames.add("Find_Individuals_and_Organizations");
-    	testCaseNames.add("dup_req_id_federation_loop_test");
+    	testCaseNames.add("Find_Members_for_Unique_Relationship");
+    	testCaseNames.add("Find_Federated_Group");
     	
     	testCaseRealNames = new HashMap<String, String>();
     	testCaseRealNames.put("search_provider_by_name", "Search Provider by Name");
@@ -87,8 +88,8 @@ public class SingleTestServlet extends HttpServlet {
     	testCaseRealNames.put("Find_Organizations_for_Unique_Individual", "Find Organizations for Unique Individual");
     	testCaseRealNames.put("Find_Individuals_for_Unique_Organization", "Find Individuals for Unique Organization");
     	testCaseRealNames.put("Find_Individuals_and_Organizations", "Find Individuals and Organizations");
-    	testCaseRealNames.put("dup_req_id_federation_loop_test", "Federation Loop Test");
-    	testCaseRealNames.put("dup_req_id_federation_loop_test_hpdplus", "Federation Loop Test");
+    	testCaseRealNames.put("Find_Members_for_Unique_Relationship", "Find Members for Unique Relationship");
+    	testCaseRealNames.put("Find_Federated_Group", "Find Federated Group");
     	
     }
     
@@ -119,7 +120,7 @@ public class SingleTestServlet extends HttpServlet {
 		SoapUI.getThreadPool().setKeepAliveTime(0, TimeUnit.SECONDS);  // any threads over the core pool size will be deallocated immediately upon completion.
 		
 		IHE_WSDL_PROJECT = getWsdlProject(getFileUrl(IHE_SOAPUI_PROJECT_FILE));
-		MSPD_WSDL_PROJECT = getWsdlProject(getFileUrl(MSPD_SOAPUI_PROJECT_FILE));
+		//MSPD_WSDL_PROJECT = getWsdlProject(getFileUrl(MSPD_SOAPUI_PROJECT_FILE));
 		
 	
 	}
@@ -189,9 +190,9 @@ public class SingleTestServlet extends HttpServlet {
 		
 		// we are only dealing with ModSpec for this version...
 		//if (wsdl.equals("modSpec")) {
-			project = MSPD_WSDL_PROJECT;			
+			//project = MSPD_WSDL_PROJECT;			
 		//} else if (wsdl.equals("ihehpd")) {
-		//    project = IHE_WSDL_PROJECT;			
+		    project = IHE_WSDL_PROJECT;			
 		//} else {
 		//	project = null;
 		//}
@@ -260,11 +261,6 @@ public class SingleTestServlet extends HttpServlet {
     								
     				Map<String, TestCase> testCases = buildTestCaseMap(project);
     				
-    				if (testCaseName.equals("dup_req_id_federation_loop_test") && wsdl.equals("modSpec")) {
-    					testCaseName = "dup_req_id_federation_loop_test_hpdplus";
-    				}
-    				
-
     				TestCase tc = testCases.get(testCaseName);
     				
     				// default values for the test case
@@ -388,9 +384,7 @@ public class SingleTestServlet extends HttpServlet {
 		
 		for (String testCaseName : testCaseNames) {
 			PdtiTestCase pdtiCase = new PdtiTestCase();
-			if (testCaseName.equals("dup_req_id_federation_loop_test") && wsdl.equals("modSpec")) {
-				testCaseName = "dup_req_id_federation_loop_test_hpdplus";
-			}
+
 			pdtiCase.setTestCaseName(testCaseName);
 			pdtiCase.setPass(false);
 			pdtiCase.setHttpError(true);
